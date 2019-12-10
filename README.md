@@ -6,12 +6,16 @@ It was possible thanks to the following contributors:
 
 1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
 2. Anke Friederici, Wiebke Kopp and Prof. Tino Weikauf worked on the python pipeline.
-3. Marco Atzori carried out the simulations and composed this guide. 
+3. Marco Atzori carried out the simulations and composed this guide.
 4. Prof. Tino Weikfauf and Prof. Philipp Schlatter supervised the work.
+
+The document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
 
 ## 1. In-situ adaptor
 
-The In-situ adaptor is developed.
+The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between such code and Nek5000.
+
+
 
 ## 2. Building instructions
 These instructions were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).

@@ -83,7 +83,7 @@ cmake \
 
 **Note:** in this example, both Mesa and Paraview share the same the path for binaries (*/home/marco/InSituPackage/local*).
 
-2) In *~/InSituPackage/ParaView-v5.6.3*? (***TODO: check if this path is correct***)
+2) In *~/InSituPackage/build*
 
 *make -j*
 

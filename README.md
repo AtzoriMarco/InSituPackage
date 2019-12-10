@@ -36,7 +36,7 @@ export PYTHON=/usr/bin/python3
 
 ***TODO: add comments about shared/static option***
 
-2) In *~/InSituPackage/mesa-18.3.3*? (***TODO: check if this path is correct***)
+2) In *~/InSituPackage/mesa-18.3.3*
 
 *make -j*
 
@@ -55,9 +55,9 @@ export OSMESA_INCLUDE_DIR=$OSMESA/include
 export OSMESA_LIBRARY=$OSMESA/lib
 ```
 
-## Python (version 5.6.3):
+## ParaView (version 5.6.3):
 
-1) Run the following script:
+1) Run the following script in *~/InSituPackage/build*:
 
 ```bash
 cmake \

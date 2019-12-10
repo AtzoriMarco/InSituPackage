@@ -1,9 +1,24 @@
-# Build for in-situ post-processing in Catalyst and Nek5000 with Mesa
-These instructures were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
+# In-situ analysis in Catalyst and Nek5000 with Mesa
 
-## Prerequisite
+The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
 
-Install packages: 
+It was possible thanks to the following contributors:
+
+1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
+2. Anke Friederici, Wiebke Kopp and Prof. Tino Weikauf worked on the python pipeline.
+3. Marco Atzori carried out the simulations and composed this guide. 
+4. Prof. Tino Weikfauf and Prof. Philipp Schlatter supervised the work.
+
+## 1. In-situ adaptor
+
+The In-situ adaptor is developed.
+
+## 2. Building instructions
+These instructions were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
+
+### Prerequisite
+
+Install packages:
 
 *sudo apt install build-essential cmake-curses-gui llvm mpich libboost-all-dev*
 
@@ -11,7 +26,7 @@ and Python 3.7.
 
 The source codes of mesa-18.3.3 and ParaView-v5.6.3 are located in *~/InSituPackage*. Binaries file will be placed in *~/InSituPackage/local*.
 
-## Mesa (version 18.3.3):
+### Mesa (version 18.3.3):
 
 1) Run in *~/InSituPackage/mesa-18.3.3* the following script:
 
@@ -55,7 +70,7 @@ export OSMESA_INCLUDE_DIR=$OSMESA/include
 export OSMESA_LIBRARY=$OSMESA/lib
 ```
 
-## ParaView (version 5.6.3):
+### ParaView (version 5.6.3):
 
 1) Run the following script in *~/InSituPackage/build*:
 
@@ -89,7 +104,7 @@ cmake \
 
 *make install*
 
-## Nek5000:
+### Nek5000 (v17):
 
 1) Before compiling a case with the InSitu implementation, export Python-path enrivoment variables with the script:
 
@@ -104,14 +119,27 @@ export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages/paraview/:$PYTHONPATH
 
 ```
 
-2) In *makenek*, add paraview in the optional compiler flags for the C compiler only:
+2) In *makenek*, add:
+
+2.1) a CXX compiler:
+
+```bash
+
+# Fortran/C compiler
+FC="mpif77"
+CC="mpicc"
+CXX="mpic++"
+
+```
+
+2.2) Paraview in the optional compiler flags for the C compiler only:
 
 ```bash
 FFLAGS="-I./inc_src -g"
 CFLAGS="-I./inc_src -I$PARAVIEW/include/paraview-5.6"
 ```
 
-and add Catalyst enrivoment variables:
+2.3) Catalyst enviroment variables:
 
 ```bash
 CATALYST=1
@@ -121,5 +149,4 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
-
-
+## 3. Test Case

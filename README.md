@@ -104,7 +104,7 @@ export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages/paraview/:$PYTHONPATH
 
 ```
 
-2) In *makenek*, add paraview as optional compiler flag for the C compiler only:
+2) In *makenek*, add paraview in the optional compiler flags for the C compiler only:
 
 ```bash
 FFLAGS="-I./inc_src -g"

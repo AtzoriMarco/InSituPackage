@@ -1,5 +1,5 @@
-# Local build for in-situ post-processing in Catalyst and Nek5000
-These instructures were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019).
+# Build for in-situ post-processing in Catalyst and Nek5000 with Mesa
+These instructures were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
 ## Prerequisite
 
@@ -32,7 +32,9 @@ export PYTHON=/usr/bin/python3
       --prefix=/home/marco/InSituPackage/local/
 ```
 
-**Note:** prefix is the path were the bin will be located.
+**Note:** *prefix* is the path were the bin will be located.
+
+***TODO: add comments about shared/static option***
 
 2) In *~/InSituPackage/mesa-18.3.3*? (***TODO: check if this path is correct***)
 
@@ -116,6 +118,8 @@ CATALYST=1
 CATALYST_LIBS=`paraview-config --libs vtkPVPythonCatalyst`
 CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 ```
+
+3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
 
 

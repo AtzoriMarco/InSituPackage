@@ -15,7 +15,23 @@ The document is organized as follows: 1) description of the adaptor and the inte
 
 The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between such code and Nek5000.
 
+The following files include part of the code.
 
+### *nek_in_situ.f*
+
+Located in *Nek5000/core/3rd_party/*.
+
+### *catalyst.f*
+
+Located in *Nek5000/core/3rd_party/*.
+
+### *nek_catalyst.cxx*
+
+Located in *Nek5000/core/3rd_party/*.
+
+### *mkuserfile*
+
+Located in *Nek5000/core/*.
 
 ## 2. Building instructions
 These instructions were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).

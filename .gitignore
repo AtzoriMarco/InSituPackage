@@ -2,3 +2,6 @@ build/
 local/
 mesa-18.3.3/
 ParaView-v5.6.3/
+
+Test/SmallWing/data/
+Test/SmallWing/obj/

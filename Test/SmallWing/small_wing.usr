@@ -1,0 +1,339 @@
+C-----------------------------------------------------------------------
+C  nek5000 user-file template
+C
+C  user specified routines:
+C     - userbc : boundary conditions
+C     - useric : initial conditions
+C     - uservp : variable properties
+C     - userf  : local acceleration term for fluid
+C     - userq  : local source term for scalars
+C     - userchk: general purpose routine for checking errors etc.
+C
+C-----------------------------------------------------------------------
+
+      subroutine uservp(ix,iy,iz,eg) ! set variable properties
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+
+      udiff  = 0.0
+      utrans = 0.0
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine userf(ix,iy,iz,ieg)
+      include 'SIZE'
+      include 'NEKUSE'
+      include 'PARALLEL'
+      include 'TRIPF'
+      include 'RTFILTER'
+      include 'INPUT'              ! if3d
+
+      integer ix,iy,iz,ieg
+      integer iel,iii
+      real*8 lmbda,s1start,s1end,s1rise,s1max,xi1,xi2
+      real*8 s1fall,pi,elipse_up,alpha_rot
+      real*8 usponge(lx1,ly1,lz1,lelv),
+     &     vsponge(lx1,ly1,lz1,lelv), wsponge(lx1,ly1,lz1,lelv)
+      real*8 uss(lx1,ly1,lz1,lelv),
+     &     vss(lx1,ly1,lz1,lelv), wss(lx1,ly1,lz1,lelv)
+      COMMON / SPONGE /  usponge, vsponge, wsponge, uss,vss,wss
+      real*8 fzt_u,fzt_d
+      real step          ! function
+
+c----------------------------------------
+
+      iel = gllel(ieg)
+      iii = (ieg-1)/(nnelx1x2(1))
+      fzt_u = fzt1(iz+iii*lz1,1)
+      fzt_d = fzt1(iz+iii*lz1,2)
+!    RT filter
+      ffx = 0.0
+      ffy = 0.0
+      ffz = 0.0
+!    Tripping and sponge
+      pi    = 4.*atan(1.)
+      alpha_rot = alpha_elipse*pi/180.0
+      if (x.ge.6.) then                 ! Sponge
+
+         s1start = 4.;
+         s1end   = 10.0;
+         s1rise  = 0.6;
+         s1fall  = 0.5;
+         s1max   = 1.;
+
+         xi1 = (x-s1start)/s1rise;
+         xi2 = (x-s1end)/s1fall + 1;
+
+         lmbda =  s1max*(step(xi1)-step(xi2))
+!         ffx = lmbda*(usponge(ix,iy,iz,iel)-vx(ix,iy,iz,iel))
+!         ffy = lmbda*(vsponge(ix,iy,iz,iel)-vy(ix,iy,iz,iel))
+         ffx = lmbda*(usponge(ix,iy,iz,iel)-ux)
+         ffy = lmbda*(vsponge(ix,iy,iz,iel)-uy)
+         if (if3d) ffz = lmbda*(0. - uz)
+      else                              ! Tripping
+c         elipse_up = -(((x-xup)*cos(alpha_rot) + (y-yup)*sin(alpha_rot))
+c     $        /radiusx)**2 - (((x-xup)*sin(alpha_rot) -  (y-yup)
+c     $        *cos(alpha_rot)) /radiusy)**2
+c         ffx = 0.0
+c         ffy = exp(elipse_up)*fzt_u+ exp(-((x-xlo)/(2.0*radiusx))**2.0
+c     $        -((y-ylo)/(2.0*radiusy))**2.0)*fzt_d
+c         ffz = 0.0
+         ffx = 0.0
+         ffy=exp(-((x-xup)/(radiusx))**2.0
+     $        -((y-yup)/(radiusy))**2.0)*fzt_u
+     $        +exp(-((x-xlo)/(radiusx))**2.0
+     $        -((y-ylo)/(radiusy))**2.0)*fzt_d
+         ffz=0.0
+c         uss(ix,iy,iz,iel) = ffy
+!         wsponge(ix,iy,iz,iel) = ffy
+      end if
+c      ffx = ffx + rtfx(ix,iy,iz,iel)
+c      ffy = ffx + rtfy(ix,iy,iz,iel)
+c      ffz = ffz + rtfz(ix,iy,iz,iel)
+c      vss(ix,iy,iz,iel)=rtfy(ix,iy,iz,iel)
+      if((ffy .LE. -1.0e-10) .OR. (ffy .GE. 1.0e-10)) then
+         ffy=ffy
+      else
+         ffy=rtfy(ix,iy,iz,iel)
+      endif
+      ffx=rtfx(ix,iy,iz,iel)
+      ffz=rtfz(ix,iy,iz,iel)
+c      wss(ix,iy,iz,iel)=ffy
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine userq(ix,iy,iz,eg) ! set source term
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      integer e,f,eg
+
+      qvol   = 0.0
+      source = 0.0
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine userbc(ix,iy,iz,iside,ieg)
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+c      include 'PARALLEL'
+c      include 'INPUT'
+      integer ix,iy,iz,iside,ieg
+
+      real*8 usponge(lx1,ly1,lz1,lelv),
+     &     vsponge(lx1,ly1,lz1,lelv),wsponge(lx1,ly1,lz1,lelv)
+      COMMON / SPONGE /  usponge, vsponge,wsponge
+
+      integer iel
+      real U0delta,S0 ! Dong parameters
+c     Dong boundary condition
+      pa =0
+      U0delta = 1.
+
+      iel = gllel(ieg)
+      ux   = usponge(ix,iy,iz,iel) !bocoarray(index,1)
+      uy   = vsponge(ix,iy,iz,iel) !bocoarray(index,2)
+      uz   = wsponge(ix,iy,iz,iel)
+      if (cbu.eq.'o  ') then
+c     The current definition assumes that the normal velocity
+c     is ux, i.e. the boundary is orthogonal to x, and the outflow
+c     direction is in postive x.
+         S0  = 0.5*(1-tanh(ux/U0delta))
+         if (IF3D) then
+            pa = -0.5*(ux*ux+uy*uy+uz*uz)*S0
+         else
+            pa = -0.5*(ux*ux+uy*uy)*S0
+         endif
+
+      endif
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine useric(ix,iy,iz,ieg) ! set up initial conditions
+
+      include 'SIZE'
+      include 'NEKUSE'
+      include 'PARALLEL'
+
+      ux = 1.
+      uy = 0.
+      uz = 0.
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine userchk()
+
+      implicit none
+
+      include 'SIZE'
+      include 'GEOM'                    ! xm1, ym1, zm1
+      include 'SOLN'                    ! T
+      include 'MASS'                    !BM1 for lambda2
+      include 'TSTEP'                   ! ISTEP
+      include 'INPUT'           ! PARAM(12) (DT)
+      include 'CHKPOINT'
+      include 'USERPAR'                 ! l2freq, FIXGEOM, NEW_DT
+
+      integer lt
+      parameter (lt=lx1*ly1*lz1*lelv)
+
+      real*8  usponge(lx1,ly1,lz1,lelv),
+     $     vsponge(lx1,ly1,lz1,lelv),wsponge(lx1,ly1,lz1,lelv)
+      real*8  uss(lx1,ly1,lz1,lelv),
+     $     vss(lx1,ly1,lz1,lelv),wss(lx1,ly1,lz1,lelv)
+      real*8 work1(1),work2(1)
+
+      COMMON / SPONGE / usponge, vsponge,wsponge,uss,vss,wss
+      logical exist_rst
+
+      if (ISTEP.eq.0) then
+         param(54) = uparam(1)
+         param(55) = uparam(2)
+      endif
+
+      call uprm_read_MA               ! New user parameter read function
+!--------------------------------------------------
+cc MA
+C      ! Restart code
+C      if (ISTEP.eq.0) then
+C         CHKPTSTEP=uparam(4)
+C         if (uparam(3).eq.1) then
+C            IFCHKPTRST=.TRUE.
+C         else
+C            IFCHKPTRST=.FALSE.
+C         endif
+C      endif
+cc MA
+
+      call checkpoint_old           ! Restart check
+
+      if (istep .eq. 0) then
+         call opcopy(usponge,vsponge,wsponge,vx,vy,vz)
+      end if
+
+      call make_RTF                     ! filter forcing
+
+! Calculate and output Lambda2
+!--------------------------------------------------
+      IFTO = .TRUE.
+      call lambda2(T(1,1,1,1,1))
+      call col2  (T(1,1,1,1,1),bm1,lt)
+      call dssum (T(1,1,1,1,1),nx1,ny1,nz1)
+      call col2  (T(1,1,1,1,1),binvm1,lt)
+!--------------------------------------------------
+      ! Stats code
+! MA    call stat_avg
+!--------------------------------------------------
+
+      call readtrip_par                 ! read forparam.i file. Very inelegant
+      call tripf                        ! Tripping
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine usrdat()
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine usrdat2()
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      return
+      end
+
+c-----------------------------------------------------------------------
+
+      subroutine usrdat3()
+
+      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      include 'TRIPF'
+
+      real bb
+      real ran2          ! function
+      integer i
+
+      if (nid.eq.0) write(*,*) 'INITIALIZATION OF TRIP FORCING'
+      seed = -32
+      bb=ran2(seed)
+
+      call readwallfile
+      do i=1,nwalls
+            call znekgen(i)
+      enddo
+
+      return
+      end
+c----------------------------------------------------------------------
+c
+c automatically added by makenek
+      subroutine usrsetvert(glo_num,nel,nx,ny,nz) ! to modify glo_num
+      integer*8 glo_num(1)
+      return
+      end
+
+C=======================================================================
+
+c
+c automatically added by makenek
+      subroutine usrflt(rmult) ! user defined filter
+      include 'SIZE'
+      real rmult(lx1)
+      call rone(rmult,lx1)
+      return
+      end
+c
+c automatically added by makenek
+      subroutine userflux ! user defined flux
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+      real fluxout(lx1*lz1)
+      return
+      end
+c
+c automatically added by makenek
+      subroutine userEOS ! user defined EOS
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      return
+      end
+
+c automatically added by makenek
+      subroutine userqtl
+
+      call userqtl_scig
+
+      return
+      end

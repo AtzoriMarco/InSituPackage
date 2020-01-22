@@ -8,4 +8,6 @@ export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages:$PYTHONPATH
 export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages/paraview/:$PYTHONPATH
 
 ./makenek small_wing
+
+mkdir perf
 mpirun -n 16 ./nek5000

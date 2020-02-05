@@ -6,7 +6,7 @@ timeStepToStartOutputAt=0
 forceOutputAtFirstCall=False
 
 # Global screenshot output options
-imageFileNamePadding=0
+imageFileNamePadding=5
 rescale_lookuptable=False
 
 # Whether or not to request specific arrays from the adaptor.
@@ -20,107 +20,81 @@ make_cinema_table=False
 
 #--------------------------------------------------------------
 # Code generated from cpstate.py to create the CoProcessor.
-# paraview version 5.6.0
+# paraview version 5.6.2
 #--------------------------------------------------------------
 
 from paraview.simple import *
 from paraview import coprocessing
+from mpi4py import MPI
 
-# ----------------------- CoProcessor definition -----------------------
+#import vmslice, vmisosurface, vmvolrender
+import vmslice, vmisosurface, savedata
 
-def CreateCoProcessor():
-  def _CreatePipeline(coprocessor, datadescription):
-    class Pipeline:
-      # state file generated using paraview version 5.6.0
+# ---------------------- Pipeline Mode Setup ----------------------
 
-      # ----------------------------------------------------------------
-      # setup the data processing pipelines
-      # ----------------------------------------------------------------
+global_freq = 2
+samples_per_mode = 101
+break_between_modes = 9
+# Do one break before the first mode
+# First timestep in which visualization is called is global_freq 
+#(simulation steps start with 1, Catalyst seems to expect 0)
+startTime = global_freq + break_between_modes * global_freq + 100
 
-      # trace generated using paraview version 5.6.0
-      #
-      # To ensure correct image size when batch processing, please search
-      # for and uncomment the line `# renderView*.ViewSize = [*,*]`
+# Samples are inclusive with respect to start and end (->-1), break are exclusive (->=+1)
+vmslice.setTimeSettings(samples_per_mode, break_between_modes, startTime)
 
-      #### disable automatic camera reset on 'Show'
-      paraview.simple._DisableFirstRenderCameraReset()
+startTime += vmslice.numModes * global_freq * (samples_per_mode-1 + break_between_modes+1)
+vmisosurface.setTimeSettings(samples_per_mode, break_between_modes, startTime)
 
-      # create a new 'PVTrivialProducer'
-      # create a producer from a simulation input
-      input = coprocessor.CreateProducer(datadescription, 'input')
+#startTime += vmisosurface.numModes * global_freq * (samples_per_mode-1 + break_between_modes+1)
+#vmvolrender.setTimeSettings(samples_per_mode, break_between_modes, startTime)
 
-      # ----------------------------------------------------------------
-      # finally, restore active source
-      SetActiveSource(input)
-      # ----------------------------------------------------------------
+startTime += vmisosurface.numModes * global_freq * (samples_per_mode-1 + break_between_modes+1)
+savedata.setTimeSettings(samples_per_mode, break_between_modes, startTime)
 
-      # Now any catalyst writers
-      xMLPUnstructuredGridWriter1 = servermanager.writers.XMLPUnstructuredGridWriter(Input=input)
-      coprocessor.RegisterWriter(xMLPUnstructuredGridWriter1,
-      filename='/home/marco/SmallWing/data/input_%t.pvtu',
-      freq=1, paddingamount=0)
+if (MPI.COMM_WORLD.Get_rank() == 0):
+    print("############## Visualization Modes ##############")
+    vmslice.printModes()
+    vmisosurface.printModes()
+    #vmvolrender.printModes()
+    savedata.printModes()
+    print("#################################################")
 
-    return Pipeline()
-
-  class CoProcessor(coprocessing.CoProcessor):
-    def CreatePipeline(self, datadescription):
-      self.Pipeline = _CreatePipeline(self, datadescription)
-
-  coprocessor = CoProcessor()
-  # these are the frequencies at which the coprocessor updates.
-  freqs = {'input': [1]}
-  coprocessor.SetUpdateFrequencies(freqs)
-  if requestSpecificArrays:
-    arrays = [['pressure', 0], ['u velocity', 0], ['v velocity', 0], ['velocity', 0], ['w velocity', 0]]
-    coprocessor.SetRequestedArrays('input', arrays)
-  coprocessor.SetInitialOutputOptions(timeStepToStartOutputAt,forceOutputAtFirstCall)
-
-  if rootDirectory:
-      coprocessor.SetRootDirectory(rootDirectory)
-
-  if make_cinema_table:
-      coprocessor.EnableCinemaDTable()
-
-  return coprocessor
-
-
-#--------------------------------------------------------------
-# Global variable that will hold the pipeline for each timestep
-# Creating the CoProcessor object, doesn't actually create the ParaView pipeline.
-# It will be automatically setup when coprocessor.UpdateProducers() is called the
-# first time.
-coprocessor = CreateCoProcessor()
-
-#--------------------------------------------------------------
-# Enable Live-Visualizaton with ParaView and the update frequency
-coprocessor.EnableLiveVisualization(False, 1)
 
 # ---------------------- Data Selection method ----------------------
 
 def RequestDataDescription(datadescription):
     "Callback to populate the request for current timestep"
-    global coprocessor
+    global vmslice
+    global vmisosurface
+    #global vmvolrender
+    global savedata
 
     # setup requests for all inputs based on the requirements of the
     # pipeline.
-    coprocessor.LoadRequestedData(datadescription)
+    vmslice.RequestDataDescription(datadescription)
+    vmisosurface.RequestDataDescription(datadescription)
+    #vmvolrender.RequestDataDescription(datadescription)
+    savedata.RequestDataDescription(datadescription)
+
 
 # ------------------------ Processing method ------------------------
 
 def DoCoProcessing(datadescription):
     "Callback to do co-processing for current timestep"
-    global coprocessor
+    global vmslice
+    global vmisosurface
+    #global vmvolrender
+    global savedata
 
-    # Update the coprocessor by providing it the newly generated simulation data.
-    # If the pipeline hasn't been setup yet, this will setup the pipeline.
-    coprocessor.UpdateProducers(datadescription)
-
-    # Write output data, if appropriate.
-    coprocessor.WriteData(datadescription);
-
-    # Write image capture (Last arg: rescale lookup table), if appropriate.
-    coprocessor.WriteImages(datadescription, rescale_lookuptable=rescale_lookuptable,
-        image_quality=0, padding_amount=imageFileNamePadding)
-
-    # Live Visualization, if enabled.
-    coprocessor.DoLiveVisualization(datadescription, "localhost", 22222)
+    timestep = datadescription.GetTimeStep()
+    
+    if (timestep >= vmslice.startTime and timestep <= vmslice.endTime):
+        vmslice.DoCoProcessing(datadescription)
+    if (timestep >= vmisosurface.startTime and timestep <= vmisosurface.endTime):
+        vmisosurface.DoCoProcessing(datadescription)
+    #if (timestep >= vmvolrender.startTime and timestep <= vmvolrender.endTime):
+    #    vmvolrender.DoCoProcessing(datadescription)
+    if (timestep >= savedata.startTime and timestep <= savedata.endTime):
+        savedata.DoCoProcessing(datadescription)
+         

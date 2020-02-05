@@ -3,7 +3,7 @@
 
 # Global timestep output options
 timeStepToStartOutputAt=0
-forceOutputAtFirstCall=False
+forceOutputAtFirstCall=True
 
 # Global screenshot output options
 imageFileNamePadding=5
@@ -17,6 +17,9 @@ rootDirectory=''
 
 # makes a cinema D index table
 make_cinema_table=False
+
+# TODO: Change this number for the real case (to e.g. 10)
+global_freq = 2
 
 #--------------------------------------------------------------
 # Code generated from cpstate.py to create the CoProcessor.
@@ -53,7 +56,7 @@ def CreateCoProcessor():
       renderView1.ViewSize = [960, 540]
       renderView1.AnnotationColor = [0.0, 0.0, 0.0]
       renderView1.AxesGrid = 'GridAxes3DActor'
-      renderView1.CenterAxesVisibility = 1
+      renderView1.CenterAxesVisibility = 0
       renderView1.OrientationAxesLabelColor = [0.0, 0.0, 0.0]
       renderView1.OrientationAxesOutlineColor = [0.0, 0.0, 0.0]
       renderView1.CenterOfRotation = [0.5, 0.0, 0.0]
@@ -83,7 +86,7 @@ def CreateCoProcessor():
       # and provide it with information such as the filename to use,
       # how frequently to write the images, etc.
       coprocessor.RegisterView(renderView1,
-          filename='Wing_VelocityMagnitude_Slice_%t.png', freq=10, fittoscreen=0, magnification=1, width=1920, height=1280, cinema={})
+          filename='Wing_VelocityMagnitude_Slice_%t.png', freq=global_freq, fittoscreen=0, magnification=1, width=1920, height=1280, cinema={})
       renderView1.ViewTime = datadescription.GetTime()
 
       # ----------------------------------------------------------------
@@ -105,7 +108,7 @@ def CreateCoProcessor():
       zSlice.SliceOffsetValues = [0.0]
 
       # init the 'Plane' selected for 'SliceType'
-      zSlice.SliceType.Origin = [0.0, 0.0, 0.05000000447034836]
+      zSlice.SliceType.Origin = [0.0, 0.0, 0.05]
       zSlice.SliceType.Normal = [0.0, 0.0, 1.0]
 
       # create a new 'Wavefront OBJ Reader'
@@ -242,7 +245,7 @@ def CreateCoProcessor():
 
   coprocessor = CoProcessor()
   # these are the frequencies at which the coprocessor updates.
-  freqs = {'input': [10, 10]}
+  freqs = {'input': [global_freq, global_freq]}
   coprocessor.SetUpdateFrequencies(freqs)
   if requestSpecificArrays:
     arrays = [['pressure', 0], ['temperature', 0], ['velocity', 0]]
@@ -281,6 +284,55 @@ def RequestDataDescription(datadescription):
 
 # ------------------------ Processing method ------------------------
 
+
+# TODO: Change this number for the real case (to e.g. 10 and 1)
+samples_per_mode = 2
+break_between_modes = 2
+
+# Resolution settings:
+# - low res 4:3 
+lowres = [720, 480]
+# - medium res 16:9
+midres = [1280, 720]
+# - high res 16:9
+highres = [1920, 1080]
+
+# Modes:
+# For each resolution (lowres, midres, highres)
+# - Compute slice without rendering
+# - Render slice without saving
+# - Save slice
+startTime = 1
+modeStartTimes = [startTime + x * global_freq * (samples_per_mode-1 + break_between_modes+1) for x in range(9)]
+modeEndTimes = [x + global_freq*(samples_per_mode-1) for x in modeStartTimes]
+endTime = modeEndTimes[-1]
+numModes = len(modeEndTimes)
+
+def setTimeSettings(set_samples_per_mode, set_break_between_modes, set_startTime):
+    global samples_per_mode, break_between_modes
+    global modeStartTimes, modeEndTimes
+    global startTime, endTime
+    samples_per_mode = set_samples_per_mode
+    break_between_modes = set_break_between_modes
+    startTime = set_startTime
+    modeStartTimes = [startTime + x * global_freq * (samples_per_mode-1 + break_between_modes+1) for x in range(9)]
+    modeEndTimes = [x + global_freq*(samples_per_mode-1) for x in modeStartTimes]
+    endTime = modeEndTimes[-1]
+
+def printModes():
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Compute slice without rendering."%(modeStartTimes[0],modeEndTimes[0],lowres[0],lowres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Compute slice without rendering."%(modeStartTimes[1],modeEndTimes[1],midres[0],midres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Compute slice without rendering."%(modeStartTimes[2],modeEndTimes[2],highres[0],highres[1]))
+    
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Render slice without saving."%(modeStartTimes[3],modeEndTimes[3],lowres[0],lowres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Render slice without saving."%(modeStartTimes[4],modeEndTimes[4],midres[0],midres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Render slice without saving."%(modeStartTimes[5],modeEndTimes[5],highres[0],highres[1]))
+    
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Save slice."%(modeStartTimes[6],modeEndTimes[6],lowres[0],lowres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Save slice."%(modeStartTimes[7],modeEndTimes[7],midres[0],midres[1]))
+    print("Time: [%i, %i], Resolution: [%i, %i],\tData: Velocity Magnitude, Mode: Save slice."%(modeStartTimes[8],modeEndTimes[8],highres[0],highres[1]))
+
+
 def DoCoProcessing(datadescription):
     "Callback to do co-processing for current timestep"
     global coprocessor
@@ -291,18 +343,38 @@ def DoCoProcessing(datadescription):
 
     timestep = datadescription.GetTimeStep()
 
-    if (timestep < 100):
-    # Compute one the slice without rendering it
-      coprocessor.Pipeline.zSlice.UpdatePipeline()
-    elif (timestep < 200):
-    # Render slice, triggers computation as well
-      Render(view=coprocessor.Pipeline.renderView1)
-    else:
-      # Write output data, if appropriate.
-      coprocessor.WriteData(datadescription);
+    if ((timestep >= modeStartTimes[0] and timestep <= modeEndTimes[0]) or 
+        (timestep >= modeStartTimes[3] and timestep <= modeEndTimes[3]) or
+        (timestep >= modeStartTimes[6] and timestep <= modeEndTimes[6])):
+        coprocessor.Pipeline.renderView1.ViewSize = lowres
 
-      # Write image capture (Last arg: rescale lookup table), if appropriate.
-      coprocessor.WriteImages(datadescription, rescale_lookuptable=rescale_lookuptable,
+    elif ((timestep >= modeStartTimes[1] and timestep <= modeEndTimes[1]) or 
+        (timestep >= modeStartTimes[4] and timestep <= modeEndTimes[4]) or
+        (timestep >= modeStartTimes[7] and timestep <= modeEndTimes[7])):
+        coprocessor.Pipeline.renderView1.ViewSize = midres
+    
+    elif ((timestep >= modeStartTimes[2] and timestep <= modeEndTimes[2]) or 
+        (timestep >= modeStartTimes[5] and timestep <= modeEndTimes[5]) or
+        (timestep >= modeStartTimes[8] and timestep <= modeEndTimes[8])):
+        coprocessor.Pipeline.renderView1.ViewSize = highres
+    else:
+        return
+
+    if (timestep <= modeEndTimes[2]):
+        # Compute one the slice without rendering it
+        coprocessor.Pipeline.zSlice.UpdatePipeline()
+    elif (timestep <= modeEndTimes[5]):
+
+        # Viewtime needs to be updated here, so not cause errors
+        coprocessor.Pipeline.renderView1.ViewTime = datadescription.GetTime()
+        # Render slice, triggers computation as well
+        Render(view=coprocessor.Pipeline.renderView1)
+    else:
+        # Write output data, if appropriate.
+        coprocessor.WriteData(datadescription);
+
+        # Write image capture (Last arg: rescale lookup table), if appropriate.
+        coprocessor.WriteImages(datadescription, rescale_lookuptable=rescale_lookuptable,
           image_quality=0, padding_amount=imageFileNamePadding)
 
     # Live Visualization, if enabled.

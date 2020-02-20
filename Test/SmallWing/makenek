@@ -3,13 +3,21 @@
 # Nek5000 config file
 #-------------------------------------------------------------------------------
 
+## Local
 # source path
 SOURCE_ROOT="/home/marco/InSituPackage/Nek5000/"
-
-# Local
+# Fortran / C compiler
 FC="mpif77"
 CC="mpicc"
 CXX="mpic++"
+
+## Beskow
+# source path
+#SOURCE_ROOT="/cfs/klemming/nobackup/a/atzori/BIG_DATA_AND_IN_SITU/InSituPackage/Nek5000/"
+# Fortran / C compiler
+#FC="ftn"
+#CC="cc -D_Float128=__float128"
+#CXX="CC"
 
 
 # pre-processor list (set to "?" to get a list of available symbols)

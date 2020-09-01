@@ -5,9 +5,9 @@ The development of this code is part of the effort to provide new data-analysis 
 It was possible thanks to the following contributors:
 
 1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
-2. Anke Friederici, Wiebke Kopp and Prof. Tino Weikauf worked on the python pipeline.
+2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf worked on the python pipeline.
 3. Marco Atzori carried out the simulations and composed this guide.
-4. Prof. Tino Weikfauf and Prof. Philipp Schlatter supervised the work.
+4. Prof. Tino Weinkauf and Prof. Philipp Schlatter supervised the work.
 
 The document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
 
@@ -120,7 +120,6 @@ cmake \
 **Note:** in this example, both Mesa and Paraview share the same the path for binaries (*/home/marco/InSituPackage/local*).
 
 2) In *~/InSituPackage/build*
-
 *make -j*
 
 *make install*
@@ -140,12 +139,11 @@ export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages/paraview/:$PYTHONPATH
 
 ```
 
-2) In *makenek*, add:
+2) In *makenek* (within the case directory, see below) add:
 
 2.1) a CXX compiler:
 
 ```bash
-
 # Fortran/C compiler
 FC="mpif77"
 CC="mpicc"
@@ -171,3 +169,12 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
 ## 3. Test Case
+
+This repository contains an exemplary Nek5000 simulation with ParaView Catalyst that simulates the flow around a NACA4412 airfoil at $$Re_c=75,000$$. 
+The Catalyst pipeline computes an isosurface of the $$\lambda_2$$ criterion.
+
+To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallWing directory and run the case with
+
+```bash
+source run.sh
+```

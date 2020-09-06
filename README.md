@@ -7,7 +7,7 @@ It was possible thanks to the following contributors:
 1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
 2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf worked on the python pipeline.
 3. Marco Atzori carried out the simulations and composed this guide.
-4. Prof. Tino Weinkauf and Prof. Philipp Schlatter supervised the work.
+4. Prof. Tino Weinkauf, Prof. Erwin Laure and Prof. Philipp Schlatter supervised the work.
 
 The document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
 

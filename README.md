@@ -173,7 +173,7 @@ CATALYST_LIBS=`paraview-config --libs vtkPVPythonCatalyst`
 CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 ```
 
-3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
+**Note:** The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
 ## 4. Test Case
 

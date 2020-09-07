@@ -2,7 +2,7 @@
 
 ## Introduction
 
-ADD SMALL DESCRIPTION INCLUDING VERSIONS AND TEST CASE
+ADD SMALL DESCRIPTION INCLUDING VERSIONS
 
 The present document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
 
@@ -171,7 +171,7 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
-## 3. Test Cases
+## 3. Test Case
 
 ### SmallWing
 

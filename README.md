@@ -1,10 +1,21 @@
 # In-situ analysis in Catalyst and Nek5000 with Mesa
 
-## Introduction
+In this repository, we describe a possible implementation of an in-situ adaptor for Nek5000 and ParaView-Catalyst, as well the building process of all its components and an  *almost realistic* test case. 
 
-ADD SMALL DESCRIPTION INCLUDING VERSIONS
+We are not using this repository for active development. We suggest considering it as a snapshot of a particular state of our code that we consider relevant.
 
-The present document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
+The present document is organized as follows: 1) Funding and Contributors 2) description of the in-situ adaptor and the interface in *Nek5000*, 3) instructions for building and 4) description of the test case.
+
+## 1. Funding and Contributors
+
+The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
+
+It was possible thanks to the following contributors:
+
+1. Mohammad Rezai and Niclas Jansson, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
+2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf, who worked on the python pipeline and the timers for performace analysis.
+3. Marco Atzori, who provided the test case and composed this guide.
+4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf, who supervised the work.
 
 ## 1. In-situ adaptor
 
@@ -37,7 +48,7 @@ Located in *Nek5000/core/*.
 This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. At present, it only allows for using a single pipeline, with name "pipe.py", located in the working directory.
 
 ## 2. Building instructions
-These instructions were used to compile Nek5000+ParaView/Catalyst, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
+These instructions were used to compile Nek5000+ParaView/Catalyst on Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
 ### Prerequisite
 
@@ -210,15 +221,4 @@ Time: [3860, 4060], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Sa
 Time: [4080, 4280],	Data: All, Mode: Save.
 ```
 
-
-## 4. Contributions
-
-The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
-
-It was possible thanks to the following contributors:
-
-1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
-2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf worked on the python pipeline.
-3. Marco Atzori carried out the simulations and composed this guide.
-4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf supervised the work.
 

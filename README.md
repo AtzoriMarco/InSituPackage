@@ -182,6 +182,8 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 This repository contains an exemplary Nek5000 simulation with ParaView Catalyst that simulates the flow around a NACA4412 airfoil at $$Re_c=75,000$$. 
 The python pipeline computes an isosurface of the $$\lambda_2$$ criterion.
 
+N elements = 10500, 3rd polynomial order
+
 To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallWing directory and run the case with
 
 ### Run

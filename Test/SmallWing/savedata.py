@@ -59,7 +59,7 @@ def CreateCoProcessor():
 
       # Now any catalyst writers
       xMLPUnstructuredGridWriter1 = servermanager.writers.XMLPUnstructuredGridWriter(Input=input)
-      coprocessor.RegisterWriter(xMLPUnstructuredGridWriter1, filename='input_%t.pvtu', freq=global_freq)
+      coprocessor.RegisterWriter(xMLPUnstructuredGridWriter1, filename='data/input_%t.pvtu', freq=global_freq)
 
     return Pipeline()
 

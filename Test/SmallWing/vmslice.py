@@ -86,7 +86,7 @@ def CreateCoProcessor():
       # and provide it with information such as the filename to use,
       # how frequently to write the images, etc.
       coprocessor.RegisterView(renderView1,
-          filename='Wing_VelocityMagnitude_Slice_%t.png', freq=global_freq, fittoscreen=0, magnification=1, width=1920, height=1280, cinema={})
+          filename='fig/Wing_VelocityMagnitude_Slice_%t.png', freq=global_freq, fittoscreen=0, magnification=1, width=1920, height=1280, cinema={})
       renderView1.ViewTime = datadescription.GetTime()
 
       # ----------------------------------------------------------------

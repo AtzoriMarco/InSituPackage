@@ -29,11 +29,11 @@ This file is part of Nek5000. It is modified to include the three subroutines *c
 
 ### *Nek5000/core/3rd_party/catalyst.f*
 
-This file is not part of Nek5000. It contains the definition of the subroutines *catalyst_init*, *catalyst_process* and *catalyst_end*, which employ default Catalyst functions (e.g. *requestdatadescription*) as well the ones that we developed for mapping Nek fields in VTK format (e.g. *creategrid* and *add_scalar_field*). Note that this file also contains timers, which, at present, write a separate record for each MPI rank.
+This file is not part of Nek5000. It contains the definition of the subroutines *catalyst_init*, *catalyst_process* and *catalyst_end*, which employ default Catalyst functions (such as *requestdatadescription*) as well the ones that we developed for mapping Nek fields in VTK format (such as *creategrid* and *add_scalar_field*). Note that this file also contains timers, which, at present, write a separate record for each MPI rank.
 
 ### *Nek5000/core/3rd_party/nek_catalyst.cxx*
 
-This file is not part of Nek5000. It contains the functions that we developed for mapping Nek fields in VTK format. 
+This file is not part of Nek5000. It contains the actual adaptor, *i.e.* the functions that map Nek5000 fields in VTK format.
 
 ### *Nek5000/core/mkuserfile*
 

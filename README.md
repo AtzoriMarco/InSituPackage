@@ -173,16 +173,43 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 ## 3. Test Case
 
-### SmallWing
+### Case Description
 
 This repository contains an exemplary Nek5000 simulation with ParaView Catalyst that simulates the flow around a NACA4412 airfoil at $$Re_c=75,000$$. 
 The python pipeline computes an isosurface of the $$\lambda_2$$ criterion.
 
 To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallWing directory and run the case with
 
+### Run
+
 ```bash
 source run.sh
 ```
+
+### Pipeline
+
+```bash
+Time: [120, 320], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Compute slice without rendering.
+Time: [340, 540], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Compute slice without rendering.
+Time: [560, 760], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Compute slice without rendering.
+Time: [780, 980], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Render slice without saving.
+Time: [1000, 1200], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Render slice without saving.
+Time: [1220, 1420], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Render slice without saving.
+Time: [1440, 1640], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Save slice.
+Time: [1660, 1860], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Save slice.
+Time: [1880, 2080], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Save slice.
+Time: [2100, 2300], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Compute iso surface without rendering.
+Time: [2320, 2520], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Compute iso surface without rendering.
+Time: [2540, 2740], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Compute iso surface without rendering.
+Time: [2760, 2960], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Render iso surface without saving.
+Time: [2980, 3180], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Render iso surface without saving.
+Time: [3200, 3400], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Render iso surface without saving.
+Time: [3420, 3620], Resolution: [720, 480],	Data: Velocity Magnitude, Mode: Save iso surface.
+Time: [3640, 3840], Resolution: [1280, 720],	Data: Velocity Magnitude, Mode: Save iso surface.
+Time: [3860, 4060], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Save iso surface.
+Time: [4080, 4280],	Data: All, Mode: Save.
+```
+
 
 ## 4. Contributions
 

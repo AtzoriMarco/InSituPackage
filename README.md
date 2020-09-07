@@ -19,7 +19,7 @@ It was possible thanks to the following contributors:
 
 ## 1. In-situ adaptor
 
-The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between such code and Nek5000.
+The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between Paraview/Cayalyst and Nek5000.
 
 The following files include part of the code.
 

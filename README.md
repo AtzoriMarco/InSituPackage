@@ -4,9 +4,9 @@ In this repository, we describe a possible implementation of an in-situ adaptor 
 
 We are not using this repository for active development. We suggest considering it as a snapshot of a particular state of our code that we consider relevant.
 
-The present document is organized in 4 sections: 1) Funding and Contributors 2) Description of the in-situ adaptor and the interface in *Nek5000*, 3) Building instructions and 4) Description of the test case.
+The present document is organized in 4 sections: 1) Funding and contributors 2) Description of the in-situ adaptor and the interface in *Nek5000*, 3) Building instructions and 4) Description of the test case.
 
-## 1. Funding and Contributors
+## 1. Funding and contributors
 
 The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
 

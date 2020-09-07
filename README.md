@@ -1,15 +1,10 @@
 # In-situ analysis in Catalyst and Nek5000 with Mesa
 
-The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
+## Introduction
 
-It was possible thanks to the following contributors:
+ADD SMALL DESCRIPTION INCLUDING VERSIONS
 
-1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
-2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf worked on the python pipeline.
-3. Marco Atzori carried out the simulations and composed this guide.
-4. Prof. Tino Weinkauf, Prof. Erwin Laure and Prof. Philipp Schlatter supervised the work.
-
-The document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
+The present document is organized as follows: 1) description of the adaptor and the interface in *Nek5000*, 2) instructions for building and 3) how to run a test case.
 
 ## 1. In-situ adaptor
 
@@ -21,20 +16,28 @@ The following files include part of the code.
 
 Located in *Nek5000/core/3rd_party/*.
 
+This file is part of Nek5000. It is modified to include the three subroutines *catalyst_init*, *catalyst_process*, and *catalyst_end* in the corresponding default subroutines for in-situ operations in Nek5000. Note that this is also the file that includes the subroutines for in-situ operation with the visualization software visit. 
+
 ### *catalyst.f*
 
 Located in *Nek5000/core/3rd_party/*.
+
+This file is not part of Nek5000. It contains the definition of the subroutines *catalyst_init*, *catalyst_process* and *catalyst_end*, which employ default Catalyst functions (e.g. *requestdatadescription*) as well the ones that we developed for mapping Nek fields in VTK format (e.g. *creategrid* and *add_scalar_field*). Note that this file also contains timers, which, at present, write a separate record for each MPI rank.
 
 ### *nek_catalyst.cxx*
 
 Located in *Nek5000/core/3rd_party/*.
 
+This file is not part of Nek5000. It contains the functions that we developed for mapping Nek fields in VTK format. 
+
 ### *mkuserfile*
 
 Located in *Nek5000/core/*.
 
+This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. At present, it only allows for using a single pipeline, with name "pipe.py", located in the working directory.
+
 ## 2. Building instructions
-These instructions were used to compile Catalyst in Nek5000, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
+These instructions were used to compile Nek5000+ParaView/Catalyst, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
 ### Prerequisite
 
@@ -81,7 +84,7 @@ export PYTHON=/usr/bin/python3
 3) export mesa variable, using the script:
 
 ```bash
-export OSMESA=/home/marco/InSituPackage/local
+export OSMESA=$HOME/InSituPackage/local
 
 export LIBDIR=$OSMESA/lib:$LIBDIR
 export LD_LIBRARY_PATH=$OSMESA/lib:$LD_LIBRARY_PATH
@@ -111,8 +114,8 @@ cmake \
       -DOSMESA_LIBRARY=$OSMESA_LIBRARY/libOSMesa.so                \
       -DPYTHON_INCLUDE_DIR=/usr/include/python3.6m \
       -DPYTHON_LIBRARY=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so   \
-      -DCMAKE_INSTALL_PREFIX=/home/marco/InSituPackage/local      \
-      /home/marco/InSituPackage/ParaView-v5.6.3
+      -DCMAKE_INSTALL_PREFIX=$HOME/InSituPackage/local      \
+      $HOME/InSituPackage/ParaView-v5.6.3
 ```
 
 **Note:** the last two lines specify the install and the source codes locations, respectively. The forth and third-last lines need to be set according with the system (where Python is installed).
@@ -130,7 +133,7 @@ cmake \
 
 ```bash
 
-export PARAVIEW=/home/marco/InSituPackage/local
+export PARAVIEW=$HOME/InSituPackage/local
 export PATH=$PARAVIEW/bin:$PATH
 export LD_LIBRARY_PATH=$PARAVIEW/lib:$LD_LIBRARY_PATH
 
@@ -170,11 +173,25 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 ## 3. Test Case
 
+### SmallWing
+
 This repository contains an exemplary Nek5000 simulation with ParaView Catalyst that simulates the flow around a NACA4412 airfoil at $$Re_c=75,000$$. 
-The Catalyst pipeline computes an isosurface of the $$\lambda_2$$ criterion.
+The python pipeline computes an isosurface of the $$\lambda_2$$ criterion.
 
 To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallWing directory and run the case with
 
 ```bash
 source run.sh
 ```
+
+## 4. Contributions
+
+The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
+
+It was possible thanks to the following contributors:
+
+1. Mohammad Rezai and Niclas Jansson developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*.
+2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf worked on the python pipeline.
+3. Marco Atzori carried out the simulations and composed this guide.
+4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf supervised the work.
+

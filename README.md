@@ -183,9 +183,6 @@ To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallW
 ```bash
 source run.sh
 ```
-### Timer
-
-
 
 ## 4. Contributions
 

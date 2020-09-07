@@ -5,7 +5,7 @@
 
 ## Local
 # source path
-SOURCE_ROOT="/home/marco/InSituPackage/Nek5000/"
+SOURCE_ROOT="$HOME/InSituPackage/Nek5000/"
 # Fortran / C compiler
 FC="mpif77"
 CC="mpicc"

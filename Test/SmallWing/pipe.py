@@ -38,7 +38,7 @@ break_between_modes = 9
 # Do one break before the first mode
 # First timestep in which visualization is called is global_freq 
 #(simulation steps start with 1, Catalyst seems to expect 0)
-startTime = global_freq + break_between_modes * global_freq + 100
+startTime = global_freq + break_between_modes * global_freq
 
 # Samples are inclusive with respect to start and end (->-1), break are exclusive (->=+1)
 vmslice.setTimeSettings(samples_per_mode, break_between_modes, startTime)

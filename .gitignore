@@ -1,7 +1,28 @@
-build/
-local/
+# source code, unpacked
 mesa-18.3.3/
 ParaView-v5.6.3/
 
-Test/SmallWing/data/
+# created building paraview/mesa
+build/
+local/
+
+# Third party libraries, created building nek5000
+Nek5000/3rd_party/gslib/lib/
+Nek5000/3rd_party/gslib/gslib-1.0.1
+
+# Test case
 Test/SmallWing/obj/
+Test/SmallWing/camutils/
+Test/SmallWing/__pycache__/
+
+Test/SmallWing/.state
+Test/SmallWing/compiler.out
+Test/SmallWing/makefile
+Test/SmallWing/nek5000
+Test/SmallWing/small_wing.f
+
+Test/SESSION.NAME
+
+Test/SmallWing/data/
+Test/SmallWing/perf/
+

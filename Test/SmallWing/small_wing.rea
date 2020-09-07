@@ -12,11 +12,11 @@
    1.00000         p008 CONDUCT
   0.000000E+00     p009
    00.000          p010 FINTIME
-  13.00E+00     p011 NSTEPS
+  5000.00E+00     p011 NSTEPS
  -1.750000E-04     p012 DT
    20.0000         p013 IOCOMM
   0.000000         p014 IOTIME
-  10.0000E+00     p015 IOSTEP
+  5000.0000E+00     p015 IOSTEP
   0.000000E+00     p016
   0.000000E+00     p017
   0.500000E-01     p018 GRID < 0 --> # cells on screen
@@ -76,7 +76,7 @@
   0.000000E-05     p072 MA: NEW_DT                  MA: FREE
   0.000000E+00     p073                         MA: FREE
   0.000000E+00     p074 verbose Helmholtz
-  50.000E+00       p075 MA: CHKPTSTEP               MA: FREE
+  10000.000E+00       p075 MA: CHKPTSTEP               MA: FREE
   1.000000E+00     p076 MA: IFCHKPTRST              MA: FREE
   0.000000E+00     p077                         MA: FREE
   2.000000E+00     p078 MA: rt_kut                  MA: FREE

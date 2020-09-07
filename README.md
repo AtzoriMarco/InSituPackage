@@ -17,7 +17,7 @@ It was possible thanks to the following contributors:
 3. Marco Atzori, who provided the test case and composed this guide.
 4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf, who supervised the work.
 
-## 1. In-situ adaptor
+## 2. In-situ adaptor
 
 The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between Paraview/Catalyst and Nek5000.
 
@@ -39,7 +39,7 @@ This file is not part of Nek5000. It contains the actual adaptor, *i.e.* the fun
 
 This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. At present, it only allows for using a single pipeline, with name "pipe.py", located in the working directory.
 
-## 2. Building instructions
+## 3. Building instructions
 These instructions were used to compile Nek5000+ParaView/Catalyst on Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
 ### Prerequisite
@@ -174,7 +174,7 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 3) The pipeline has a fixed name, *pipe.py*, and needs to be in the run folder of the simulation.
 
-## 3. Test Case
+## 4. Test Case
 
 ### Case Description
 

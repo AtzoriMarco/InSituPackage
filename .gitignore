@@ -20,9 +20,8 @@ Test/SmallWing/compiler.out
 Test/SmallWing/makefile
 Test/SmallWing/nek5000
 Test/SmallWing/small_wing.f
-
-Test/SESSION.NAME
+Test/SmallWing/SESSION.NAME
 
 Test/SmallWing/data/
 Test/SmallWing/perf/
-
+Test/SmallWing/fig/

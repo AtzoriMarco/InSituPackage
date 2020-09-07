@@ -1,24 +1,22 @@
 !=======================================================================
 !     Adam Peplinski; 2015.10.20
-!     Set of subroutines to read user and module parameters using 
+!     Set of subroutines to read user and module parameters using
 !     namelists.
-!     
+!
 !=======================================================================
 !***********************************************************************
 !     read parameters from the file
       subroutine uprm_read
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'            ! NID
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'           ! REAFLE
 
 !     local variables
       integer len, ierr
       integer iunit
 
-      character*132 fname 
+      character*132 fname
 
 !     functions
       integer ltrunc
@@ -52,7 +50,7 @@ cc MA:      include 'INPUT_DEF'
 !     stamp logs
       if (NIO.eq.0) write(*,*) 'User parameter list'
       call uprm_out(6)
-      if (NIO.eq.0) write(*,*) 
+      if (NIO.eq.0) write(*,*)
 
       return
       end
@@ -88,7 +86,6 @@ cc MA:      include 'INPUT_DEF'
 
       rewind(iunit)
 !     STATS
-!! MA, for insitu      call stat_param_in(iunit)
 
       return
       end
@@ -114,11 +111,10 @@ cc MA:      include 'INPUT_DEF'
 !     SFD
 !      call sfd_param_out(iunit)
 
-!     RTFILTER 
+!     RTFILTER
       call rtfil_param_out(iunit)
 
 !     STATS
-!! MA, for insitu      call stat_param_out(iunit)
 
       return
       end
@@ -127,9 +123,7 @@ cc MA:      include 'INPUT_DEF'
       subroutine user_param_in(fid)
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'            !
-cc MA:      include 'PARALLEL_DEF' 
       include 'PARALLEL'        ! ISIZE, WDSIZE, LSIZE,CSIZE
       include 'USERPAR'         !
 
@@ -157,15 +151,6 @@ cc MA:      include 'PARALLEL_DEF'
 !     84 - NAMELIST group header not found in external file
 !     85 - NAMELIST group header not found in internal file
 
-! ! !       endif
-! ! !       call err_chk(ierr,'Error reading USERPAR parameters.$')
-
-!     broadcast data
-! ! !       call bcast(UPRM_PRB     ,ISIZE)
-! ! !       call bcast(L2FREQ       ,ISIZE)
-! ! !       call bcast(FIXGEOM      ,ISIZE)
-! ! !       call bcast(NEW_DT       ,WDSIZE)
-
       return
       end
 !***********************************************************************
@@ -173,7 +158,6 @@ cc MA:      include 'PARALLEL_DEF'
       subroutine user_param_out(fid)
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'            !
       include 'USERPAR'         !
 
@@ -195,23 +179,17 @@ cc MA:      include 'SIZE_DEF'
       return
       end
 !***********************************************************************
-cc MA:
+
 !
-      subroutine uprm_read_MA 
-      
+      subroutine uprm_read_MA
+
       implicit none
 
-cc MA:      include 'SIZE_DEF'      
       include 'SIZE'
-cc MA:      include 'GEOM_DEF'
       include 'GEOM'                    ! xm1, ym1, zm1
-cc MA:      include 'SOLN_DEF'
       include 'SOLN'                    ! T
-cc MA:      include 'MASS_DEF'
       include 'MASS'                    !BM1 for lambda2
-cc MA:      include 'TSTEP_DEF'
       include 'TSTEP'                   ! ISTEP
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'                   ! PARAM(12) (DT)
       include 'USERPAR'                 ! l2freq, FIXGEOM, NEW_DT
       include 'RTFILTER'                ! Diagnostic spectra only. Can be removed later.
@@ -222,49 +200,30 @@ cc MA:      include 'INPUT_DEF'
 
       UPRM_PRB = INT(PARAM(69))
       L2FREQ = INT(PARAM(70))
-cc MA: useles here:
-cc    FIXGEOM = INT(PARAM(71))
+
       NEW_DT = PARAM(72)
-      
-!       
-! cc MA: substitute:      call chkpt_param_in(iunit)
+
+!
       CHKPTSTEP = INT(PARAM(75))
-!       
+!
       IFCHKPTRST = .FALSE.
       if ((INT(PARAM(76))).gt.0) then
          IFCHKPTRST = .TRUE.
       endif
-! 
-! cc MA: substitute:      call rtfil_param_in(iunit)
+!
       rt_kut = INT(PARAM(78))
-      rt_kai = PARAM(79)	
+      rt_kai = PARAM(79)
       rt_wght = PARAM(80)
-!       
-      rt_ifboyd     =.TRUE. 
+!
+      rt_ifboyd     =.TRUE.
       if ((INT(PARAM(81)).le.0)) then
             rt_ifboyd = .false.
       endif
-! 
-! cc MA: substitute:      call stat_param_in(iunit)
+!
       stat_comp = INT(PARAM(87))
       stat_outp = INT(PARAM(88))
 
-cc      write (*,*) 'MAcheck: density',PARAM(1) 
 
-cc      write (*,*) 'MAcheck: UPRM_PRB', UPRM_PRB,'?=?',PARAM(69) 
-cc      write (*,*) 'MAcheck: L2FREQ', L2FREQ,'?=?',PARAM(70)
-cc      write (*,*) 'MAcheck: FIXGEOM', FIXGEOM,'?=?',PARAM(71)
-cc      write (*,*) 'MAcheck: NEW_DT', NEW_DT,'?=?',PARAM(72)
-cc      write (*,*) 'MAcheck: CHKPTSTEP', CHKPTSTEP,'?=?',PARAM(75)
-cc      write (*,*) 'MAcheck: IFCHKPTRST', IFCHKPTRST,'?=?',PARAM(76)
-cc      write (*,*) 'MAcheck: rt_kut', rt_kut,'?=?',PARAM(78)
-cc      write (*,*) 'MAcheck: rt_kai', rt_kai,'?=?',PARAM(79)
-cc      write (*,*) 'MAcheck: rt_wght', rt_wght,'?=?',PARAM(80)
-cc      write (*,*) 'MAcheck: rt_ifboyd', rt_ifboyd,'?=?',PARAM(81)
-cc      write (*,*) 'MAcheck: stat_comp', stat_comp,'?=?',PARAM(87)
-cc      write (*,*) 'MAcheck: stat_outp', stat_outp,'?=?',PARAM(88)
-      
       return
       end
 !***********************************************************************
-      

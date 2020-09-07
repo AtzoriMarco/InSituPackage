@@ -5,9 +5,7 @@
 !-----------------------------------------------------------------------
       subroutine tripf
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'TSTEP_DEF'
       include 'TSTEP'
       include 'TRIPF'
 
@@ -78,13 +76,11 @@ c
 
       end subroutine tripf
 
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
       subroutine ARnumnodes
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
       include 'TRIPF'
-cc MA:      include 'GEOM_DEF'
       include 'GEOM'
 
       integer ARatio
@@ -102,20 +98,17 @@ cc MA:      include 'GEOM_DEF'
          ARatio = ARatio + 1
       endif
       wallpar(4) = wallpar(4)*ARatio
-      
-c      write(*,*) 'Wall parameter is:', wallpar(4) 
+
+c      write(*,*) 'Wall parameter is:', wallpar(4)
 
       return
       end
 c-----------------------------------------------------------------------
       subroutine readwallfile
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
       include 'TRIPF'
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'
-cc MA:      include 'PARALLEL_DEF'
       include 'PARALLEL'
       integer len,ierr
       character*132 wallfname
@@ -171,7 +164,7 @@ c   read wall definitions and parameters
  32     ierr=1
  33     continue
       endif
-     
+
       call err_chk(ierr,'Not enough walls.$')
       call bcast(wallpar,nwallpar*WDSIZE)
       call bcast(direction,nwalls*CSIZE)
@@ -185,7 +178,6 @@ c   read wall definitions and parameters
 c----------------------------------------------------------------------
       subroutine znekgen(wall)
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
       include 'TOTAL'
       include 'TRIPF'
@@ -438,7 +430,7 @@ c
       enddo
 
       end subroutine rand_func
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 
       real function ran2(idum)
 c
@@ -487,11 +479,8 @@ c-----------------------------------------------------------------------
 
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'PARALLEL_DEF'
       include 'PARALLEL'
-cc MA:      include 'TSTEP_DEF'
       include 'TSTEP'
       include 'TRIPF'
 
@@ -517,7 +506,7 @@ c    read TRIP FORCING parameters from forparam.i
          if(nid.eq.0)  write(6,*) 'tampt =  ', tampt
          read(1011,*) alpha_elipse
          if(nid.eq.0)  write(6,*) 'alpha =  ', alpha_elipse
-      
+
          close(unit=1011)
       end if
 
@@ -525,6 +514,3 @@ c    read TRIP FORCING parameters from forparam.i
       end subroutine readtrip_par
 
 C=======================================================================
-
-
- 

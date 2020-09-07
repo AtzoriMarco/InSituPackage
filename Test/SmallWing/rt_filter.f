@@ -1,17 +1,15 @@
-!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !!
 !!   Author: Prabal Negi
 !!   Implementation of Relaxation Term (RT) filtering
 !!
-!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-!!----------------------------------------------------------------------  
-!     read parameters relaxation term filtering 
+!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!!----------------------------------------------------------------------
+!     read parameters relaxation term filtering
       subroutine rtfil_param_in(fid)
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'            !
-cc MA:      include 'PARALLEL_DEF' 
       include 'PARALLEL'        ! ISIZE, WDSIZE, LSIZE,CSIZE
       include 'RTFILTER'
 
@@ -26,32 +24,21 @@ cc MA:      include 'PARALLEL_DEF'
 
 
 !     default values
-! ! !       rt_kut        = 1            ! total number of modes 
+! ! !       rt_kut        = 1            ! total number of modes
 ! ! !       rt_kai        = 100.
 ! ! !       rt_wght       = 0.1
-! ! !       rt_ifboyd     =.true. 
+! ! !       rt_ifboyd     =.true.
 
 !     read the file
       ierr=0
-! ! !       if (NID.eq.0) then
-! ! !          read(unit=fid,nml=RTFILTER,iostat=ierr)
-! ! !       endif
-! ! !       call err_chk(ierr,'Error reading RTFILTER parameters.$')
-
-!     broadcast data
-! ! !       call bcast(rt_kut,      ISIZE)
-! ! !       call bcast(rt_kai,      WDSIZE)
-! ! !       call bcast(rt_wght,     WDSIZE)
-! ! !       call bcast(rt_ifboyd,   LSIZE)
 
       return
       end
 !-----------------------------------------------------------------------
-!     write parameters relaxation term filtering 
+!     write parameters relaxation term filtering
       subroutine rtfil_param_out(fid)
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'            !
       include 'RTFILTER'
 
@@ -74,17 +61,14 @@ cc MA:      include 'SIZE_DEF'
       return
       end
 !-----------------------------------------------------------------------
-!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+!!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !    Main interface for RT filter
       subroutine make_RTF
 
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'SOLN_DEF'
       include 'SOLN'
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'
       include 'RTFILTER'
 
@@ -97,16 +81,16 @@ cc MA:      include 'INPUT_DEF'
       parameter (lm=40)
       parameter (lm2=lm*lm)
       real f_filter(lm2)
-      
+
       integer newfilter          ! 0 => same shape in 2D/3D as the NEK filter
-                                 ! 1 => filter funtion applied directly to 3D field  
+                                 ! 1 => filter funtion applied directly to 3D field
       real op_mat(lx1,lx1)
       save op_mat
 
       integer icalld
       save icalld
       data icalld /0/
-!------------------------------ 
+!------------------------------
 
       if (rt_wght.eq.0) then
            call rzero(rtfx,n)
@@ -118,7 +102,7 @@ cc MA:      include 'INPUT_DEF'
       if (icalld.eq.0) then
 !    Create the filter
 !           call spectrnsfm(f_filter,rt_kut,rt_wght)
-           newfilter = 0           ! 0 => nek formulation           
+           newfilter = 0           ! 0 => nek formulation
            call make_fil_new(f_filter,rt_kut,rt_wght,newfilter)
 
            call build_RT_MAT(op_mat,f_filter,rt_ifboyd)
@@ -144,11 +128,8 @@ c-----------------------------------------------------------------------
 !     Test before using.
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'
-cc MA:      include 'PARALLEL_DEF'
       include 'PARALLEL'
 
       real intv(lx1*lx1)
@@ -171,11 +152,11 @@ cc MA:      include 'PARALLEL_DEF'
          amp = wght*(k-k0)*(k-k0)/(kut*kut)   ! quadratic growth
          diag(kk) = 1.-amp
       enddo
- 
+
       call build_filter_inv(intv,diag,lx1)
- 
+
       call mxm(intv,lx1,diag,lx1,f_filter,lx1)
- 
+
       do k=1,lx1*lx1
          intv(k) = 1.-f_filter(k)
       enddo
@@ -187,7 +168,7 @@ cc MA:      include 'PARALLEL_DEF'
    6   format(a8,16f9.6,6(/,8x,16f9.6))
       endif
 
-!    testing_prabal
+!    testing
 !      if (nio.eq.0) then
 !      do k=1,lx1
 !          write(6,8) (f_filter(k0),k0=(k-1)*lx1+1,k*lx1)
@@ -198,7 +179,7 @@ cc MA:      include 'PARALLEL_DEF'
       return
       end subroutine spectrnsfm
 
-c---------------------------------------------------------------------- 
+c----------------------------------------------------------------------
 
       subroutine build_filter_inv(intvv,intv,lx1)
 
@@ -220,7 +201,7 @@ c----------------------------------------------------------------------
       call ident(intvv,lx1)
       call sub2(intvv,intv,lt)
       call rzero(wk1,lt)
-     
+
       do ii=0,trunc
 
       call ident(wk2,lx1)
@@ -239,16 +220,15 @@ c----------------------------------------------------------------------
       return
       end subroutine build_filter_inv
 
-c---------------------------------------------------------------------- 
+c----------------------------------------------------------------------
 
       subroutine build_RT_MAT(op_mat,f_filter,ifboyd)
 
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
 
-      logical IFBOYD 
+      logical IFBOYD
       integer n
       parameter (n=lx1*lx1)
       integer lm, lm2
@@ -278,7 +258,7 @@ cc MA:      include 'SIZE_DEF'
 !      endif
 
       call spec_coeff_init2(ref_xmap,ifboyd)
-      
+
       call copy(wk_XMAP,REF_XMAP,lm2)
       call copy(wk1,wk_XMAP,lm2)
 
@@ -300,16 +280,15 @@ cc MA:      include 'SIZE_DEF'
       return
       end subroutine build_RT_MAT
 
-c---------------------------------------------------------------------- 
+c----------------------------------------------------------------------
 
       subroutine build_RT(v,f,nx,nz,if3d,newfilter)
 c
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
 
-      integer nxyz 
+      integer nxyz
       parameter (nxyz=lx1*ly1*lz1)
 
       real v(nxyz,lelt),w1(nxyz*lelt),w2(nxyz*lelt)
@@ -342,7 +321,7 @@ c           Filter
 
             if (newfilter.eq.1) then
                  call copy(v(1,e),w1,nxyz)
-            else 
+            else
                  call sub3(w2,v(1,e),w1,nxyz)
                  call copy(v(1,e),w2,nxyz)
             endif
@@ -358,7 +337,7 @@ c           Filter
 
             if (newfilter.eq.1) then
                  call copy(v(1,e),w1,nxyz)
-            else 
+            else
                  call sub3(w2,v(1,e),w1,nxyz)
                  call copy(v(1,e),w2,nxyz)
             endif
@@ -370,17 +349,14 @@ c
       end subroutine build_RT
 
 
-c---------------------------------------------------------------------- 
+c----------------------------------------------------------------------
 
       subroutine make_fil_new(diag,kut,wght,newfilter)
 
       implicit none
 
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'INPUT_DEF'
       include 'INPUT'
-cc MA:      include 'PARALLEL_DEF'
       include 'PARALLEL'
 
       real diag(lx1*lx1)
@@ -394,7 +370,7 @@ c     Set up transfer function
 c
       nx = lx1
       call ident   (diag,nx)
-      call rzero   (intv,nx*nx) 
+      call rzero   (intv,nx*nx)
 c
 !      kut  = param(105)+1
 !      wght = param(106)
@@ -404,7 +380,7 @@ c
          kk = k+nx*(k-1)
          amp = wght*(k-k0)*(k-k0)/(kut*kut)   ! quadratic growth
          diag(kk) = 1.-amp
-         intv(kk) = amp          
+         intv(kk) = amp
       enddo
 
 !      do k=1,lx1*lx1
@@ -439,7 +415,7 @@ c
       return
       end subroutine make_fil_new
 
-c---------------------------------------------------------------------- 
+c----------------------------------------------------------------------
 
       subroutine spec_coeff_init2(ref_xmap,ifboyd)
 !     Initialise spectral coefficient mapping
@@ -448,9 +424,7 @@ c----------------------------------------------------------------------
       implicit none
 
 !      include 'NEKP4EST_DEF' ! variable declaration for include files
-cc MA:      include 'SIZE_DEF'
       include 'SIZE'
-cc MA:      include 'WZ_DEF'
       include 'WZ'
 
       integer lm, lm2
@@ -500,13 +474,13 @@ cc MA:      include 'WZ_DEF'
               do k=3,nx
                  kj = kj+1
                  pht(kj) = plegx(k)
-              enddo         
+              enddo
          endif
       enddo
 
       call transpose (ref_xmap,nx,pht,nx)
 
-!    testing_prabal
+!    testing
 !      if (nio.eq.0) then
 !      write(6,*) 'REF_XMAP'
 !      do i=1,lx1
@@ -515,7 +489,7 @@ cc MA:      include 'WZ_DEF'
 !      enddo
 !      endif
 
-!    testing_prabal
+!    testing
 !      if (nio.eq.0) then
 !      do i=1,lx1
 !          write(6,8) (REF_XMAP(i,j),j=1,lx1)
@@ -536,4 +510,3 @@ cc MA:      include 'WZ_DEF'
 
 !=======================================================================
 c
-

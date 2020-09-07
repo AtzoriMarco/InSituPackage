@@ -11,9 +11,10 @@ export PYTHONPATH=$PARAVIEW/lib/python3.6/site-packages/paraview/:$PYTHONPATH
 
 mkdir perf
 mkdir data
+mkdir fig
 
 echo 'small_wing' >> SESSION.NAME
 pwd >> SESSION.NAME
 
 
-#mpirun -n 16 ./nek5000
+mpirun -n 16 ./nek5000

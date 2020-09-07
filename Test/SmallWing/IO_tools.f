@@ -1,7 +1,7 @@
 !=======================================================================
 !     Adam Peplinski; 2015.10.25
 !     Set of subroutines reated to IO
-!     
+!
 !=======================================================================
 !***********************************************************************
 !     get free unit number
@@ -31,16 +31,12 @@
       end
 !***********************************************************************
 c     To create file name; based on mfo_open_files from
-      subroutine IO_mfo_fname(prefix,fname,bname,k) 
+      subroutine IO_mfo_fname(prefix,fname,bname,k)
       implicit none
 
-c      include 'SIZE_DEF'
       include 'SIZE'
-! !       include 'INPUT_DEF'
       include 'INPUT'
-! !       include 'PARALLEL_DEF'
       include 'PARALLEL'
-! !       include 'RESTART_DEF'
       include 'RESTART'
 
 !     argument list
@@ -75,7 +71,7 @@ c      include 'SIZE_DEF'
       rfileo = nfileo
 #endif
       ndigit = log10(rfileo) + 1
-      
+
       k = 1
       if (ifdiro) then          !  Add directory
          call chcopy(fnam1(1),'A',1)
@@ -94,16 +90,16 @@ c      include 'SIZE_DEF'
       len=ltrunc(bname,132)   !  Add SESSION
       call chcopy(fnam1(k),bname,len)
       k = k+len
-     
+
       if (ifreguo) then
          len=4
          call chcopy(fnam1(k),'_reg',len)
          k = k+len
       endif
-      
+
       call chcopy(fnam1(k),six,ndigit) !  Add file-id holder
       k = k + ndigit
-      
+
       call chcopy(fnam1(k  ),dot,1) !  Add .f appendix
       call chcopy(fnam1(k+1),'f',1)
       k = k + 2
@@ -112,16 +108,14 @@ c      include 'SIZE_DEF'
       return
       end
 !***********************************************************************
-!     it is a modified version of mbyte_open from ic.f but without 
-!     equivalence and MPIIO part; I need for some tools 
+!     it is a modified version of mbyte_open from ic.f but without
+!     equivalence and MPIIO part; I need for some tools
 !     because processor independent part is saved only by master.
 !***********************************************************************
       subroutine IO_mbyte_open_srl(hname,fid,ierr) ! open  blah000.fldnn
       implicit none
 
-c      include 'SIZE_DEF'
       include 'SIZE'
-! !       include 'TSTEP_DEF'
       include 'TSTEP'
 
 !     argumnt list

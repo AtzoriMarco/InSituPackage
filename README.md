@@ -28,7 +28,7 @@ Located in *Nek5000/core/3rd_party/*.
 
 Located in *Nek5000/core/*.
 
-This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. 
+This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. At present, it only allows for using a single pipeline, with name "pipe.py", located in the working directory.
 
 ## 2. Building instructions
 These instructions were used to compile Nek5000+ParaView/Catalyst, for Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).

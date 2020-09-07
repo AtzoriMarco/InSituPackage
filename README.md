@@ -49,6 +49,7 @@ Install packages:
 *sudo apt install build-essential cmake-curses-gui llvm mpich libboost-all-dev*
 
 and Python 3.6:
+
  *sudo apt-get install python3.6*
 
 The source codes of mesa-18.3.3 and ParaView-v5.6.3 are located in *~/InSituPackage*. Binaries file will be placed in *~/InSituPackage/local*.

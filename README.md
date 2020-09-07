@@ -16,13 +16,19 @@ The following files include part of the code.
 
 Located in *Nek5000/core/3rd_party/*.
 
+This file is part of Nek5000. It is modified to include the three subroutines *catalyst_init*, *catalyst_process*, and *catalyst_end* in the corresponding default subroutines for in-situ operations in Nek5000. Note that this is also the file that includes the subroutines for in-situ operation with the visualization software visit. 
+
 ### *catalyst.f*
 
 Located in *Nek5000/core/3rd_party/*.
 
+This file is not part of Nek5000. It contains the definition of the subroutines *catalyst_init*, *catalyst_process* and *catalyst_end*, which employ default Catalyst functions (e.g. *requestdatadescription*) as well the ones that we developed for mapping Nek fields in VTK format (e.g. *creategrid* and *add_scalar_field*). Note that this file also contains timers, which, at present, write a separate record for each MPI rank.
+
 ### *nek_catalyst.cxx*
 
 Located in *Nek5000/core/3rd_party/*.
+
+This file is not part of Nek5000. It contains the functions that we developed for mapping Nek fields in VTK format. 
 
 ### *mkuserfile*
 

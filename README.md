@@ -42,7 +42,7 @@ This file is part of Nek5000. It is modified to add the subroutine *catalyst_usr
 ## 3. Building instructions
 These instructions were used to compile Nek5000+ParaView/Catalyst on Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
-### Prerequisite
+### 3.1 Prerequisite
 
 Install packages:
 
@@ -53,7 +53,7 @@ and Python 3.7:
 
 The source codes of mesa-18.3.3 and ParaView-v5.6.3 are located in *~/InSituPackage*. Binaries file will be placed in *~/InSituPackage/local*.
 
-### Mesa (version 18.3.3):
+### 3.2 Mesa (version 18.3.3):
 
 1) Run in *~/InSituPackage/mesa-18.3.3* the following script:
 
@@ -97,7 +97,7 @@ export OSMESA_INCLUDE_DIR=$OSMESA/include
 export OSMESA_LIBRARY=$OSMESA/lib
 ```
 
-### ParaView (version 5.6.3):
+### 3.3 ParaView (version 5.6.3):
 
 1) Run the following script in *~/InSituPackage/build*:
 
@@ -130,7 +130,7 @@ cmake \
 
 *make install*
 
-### Nek5000 (v17):
+### 3.4 Nek5000 (v17):
 
 1) Before compiling a case with the InSitu implementation, export Python-path enrivoment variables with the script:
 

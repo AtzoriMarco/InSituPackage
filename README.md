@@ -42,13 +42,13 @@ This file is part of Nek5000. It is modified to add the subroutine *catalyst_usr
 ## 3. Building instructions
 These instructions were used to compile Nek5000+ParaView/Catalyst on Ubuntu 18.04 (09/12/2019), with the aim of reproducing a similar build for the HPC system *Beskow* at PDC, Stockholm (Cray XC40).
 
-### 3.1 Prerequisite
+### 3.1 Prerequisites
 
 Install packages:
 
 *sudo apt install build-essential cmake-curses-gui llvm mpich libboost-all-dev*
 
-and Python 3.7:
+and Python 3.6:
  *sudo apt-get install python3.6*
 
 The source codes of mesa-18.3.3 and ParaView-v5.6.3 are located in *~/InSituPackage*. Binaries file will be placed in *~/InSituPackage/local*.

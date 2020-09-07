@@ -1,23 +1,29 @@
 # In-situ analysis in Catalyst and Nek5000 with Mesa
 
-In this repository, we describe a possible implementation of an in-situ adaptor for Nek5000 and ParaView-Catalyst, as well the building process of all its components and an  *almost realistic* test case. 
+In this repository, we describe our implementation of an in-situ adaptor for *Nek5000* and *ParaView/Catalyst*, as well the building process of all its components, and a test case. The setup of the test case partially replicate that of a realistic high-fidelity simulation, but it we employed a sufficiently coarse resolution to allow testing on a standard personal computer.
 
 We are not using this repository for active development. We suggest considering it as a snapshot of a particular state of our code that we consider relevant.
 
-The present document is organized in 4 sections: 1) Funding and contributors 2) Description of the in-situ adaptor and the interface in *Nek5000*, 3) Building instructions and 4) Description of the test case.
+The present document is organized in 4 sections: 1) Funding and contributors 2) Description of the in-situ adaptor and the interface *Nek5000/Catalyst*, 3) Building instructions and 4) Description of the test case.
+
+**Note:** this guide is written to allow building and running the test case without previous experience with *Nek5000* and *ParaView/Catalyst*, but it is not a self-contatined documentation. In particular, section 4 is written assuming that readers have familiarity with *Nek5000*. 
 
 ## 1. Funding and contributors
 
-The development of this code is part of the effort to provide new data-analysis tools for numerical simulations undergone by the *In-Situ Big Data Analysis for Flow and Climate Simulations* consortium, funded by the Swedish Foundation of Strategic Research.
 
-It was possible thanks to the following contributors:
+The development of this code is part of the effort undergone by the *In-Situ Analysis of Big Data for Flow and Climate Simulations* consortium to provide new data-analysis tools for numerical simulation. This collaboration is funded by the Swedish Foundation of Strategic Research (project BD15-0082).
 
-1. Dr. Niclas Jansson and Mohammad Rezai, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
-2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf, who worked on the python pipeline and the timers for performace analysis.
-3. Marco Atzori, who provided the test case and composed this guide.
-4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf, who supervised the work.
+The creation of this repository was possible thanks to the following contributors:
 
-## 2. In-situ adaptor
+1. Dr Niclas Jansson and Mohammad Rezai, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
+2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf, who worked on the Python pipeline and the timers for performance analysis.
+3. Marco Atzori, who provided the test case employed here and composed this guide.
+
+Dr Ricardo Vinuesa, Prof Erwin Laure, Prof Philipp Schlatter and Prof Tino Weinkauf supervised the project. Furthermore, Dr Stefano Markidis gave valuable suggestions in evaluating the performance of the code, and Daniele Massaro and Fermin Mallor carried out tests and performance analyses.
+
+All the contributors and supervisors mentioned above were employed at the KTH - Royal Institute of Technology, in Stockholm, Sweden, when they collaborated at this project.
+
+## 2. In-situ adaptor and interface
 
 The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between Paraview/Catalyst and Nek5000.
 
@@ -177,20 +183,16 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 ## 4. Test Case
 
-### Case Description
+### Numerical simulation
 
-This repository contains an exemplary Nek5000 simulation with ParaView Catalyst that simulates the flow around a NACA4412 airfoil at $$Re_c=75,000$$. 
-The python pipeline computes an isosurface of the $$\lambda_2$$ criterion.
+This test case describes the flow around a NACA4412 at a moderate Reynolds number, and it is intermediate between a tutorial and an example of a realistic CFD simulation. 
 
-N elements = 10500, 3rd polynomial order
+The setup shares some similarities with the high-fidelity numerical simulation carried out by Vinuesa *et al.* ( https://doi.org/10.1016/j.ijheatfluidflow.2018.04.017 ), such as boundary conditions, LES filter, tripping and checkpoint implementation of a realistic simulation. However, the default resolution is much coarser than what needed to provide an accurate description of the flow. In particular, the grid contains 10,500 spectral elements, and we employ polynomials of 3rd order to represent the velocity, resulting in 672,000 grid points (as a comparison, the smallest simulation carried out in the study mentioned above employed 28,000 elements and polynomials of 11th order, resulting in 48,384,000 grid points).
 
-To run the SmallWing case, make the modifications for Nek5000 in the Test/SmallWing directory and run the case with
 
-### Run
+The very coarse resolution allows running on personal computers with standard computational resources but also makes the result of the simulation unreliable.
 
-```bash
-source run.sh
-```
+**Note:** the number of grid points of this test case can be easily increased by increasing the polynomial order. 
 
 ### Pipeline
 
@@ -216,4 +218,8 @@ Time: [3860, 4060], Resolution: [1920, 1080],	Data: Velocity Magnitude, Mode: Sa
 Time: [4080, 4280],	Data: All, Mode: Save.
 ```
 
+### Run
 
+```bash
+source run.sh
+```

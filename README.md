@@ -71,7 +71,7 @@ export PYTHON=/usr/bin/python3
       --disable-osmesa --enable-gallium-osmesa          \
       --enable-shared \
       --enable-texture-float \
-      --prefix=/home/marco/InSituPackage/local/
+      --prefix=$HOME/InSituPackage/local/
 ```
 
 **Note:** *prefix* is the path were the bin will be located.
@@ -123,7 +123,7 @@ cmake \
 
 **Note:** the last two lines specify the install and the source codes locations, respectively. The forth and third-last lines need to be set according with the system (where Python is installed).
 
-**Note:** in this example, both Mesa and Paraview share the same the path for binaries (*/home/marco/InSituPackage/local*).
+**Note:** in this example, both Mesa and Paraview share the same the path for binaries (*$HOME/InSituPackage/local*).
 
 2) In *~/InSituPackage/build*
 *make -j*

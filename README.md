@@ -12,7 +12,7 @@ The development of this code is part of the effort to provide new data-analysis 
 
 It was possible thanks to the following contributors:
 
-1. Niclas Jansson and Mohammad Rezai, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
+1. Dr. Niclas Jansson and Mohammad Rezai, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
 2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf, who worked on the python pipeline and the timers for performace analysis.
 3. Marco Atzori, who provided the test case and composed this guide.
 4. Prof. Erwin Laure, Prof. Philipp Schlatter and Prof. Tino Weinkauf, who supervised the work.

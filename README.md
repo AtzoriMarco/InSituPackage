@@ -19,31 +19,23 @@ It was possible thanks to the following contributors:
 
 ## 1. In-situ adaptor
 
-The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between Paraview/Cayalyst and Nek5000.
+The in-situ adaptor includes both the code that converts the data structures from Nek5000 to VTK format, and the interface between Paraview/Catalyst and Nek5000.
 
-The following files include part of the code.
+The most relevant parts of the code that we developped is contained in the following files:
 
-### *nek_in_situ.f*
-
-Located in *Nek5000/core/3rd_party/*.
+### *Nek5000/core/3rd_party/nek_in_situ.f*
 
 This file is part of Nek5000. It is modified to include the three subroutines *catalyst_init*, *catalyst_process*, and *catalyst_end* in the corresponding default subroutines for in-situ operations in Nek5000. Note that this is also the file that includes the subroutines for in-situ operation with the visualization software visit. 
 
-### *catalyst.f*
-
-Located in *Nek5000/core/3rd_party/*.
+### *Nek5000/core/3rd_party/catalyst.f*
 
 This file is not part of Nek5000. It contains the definition of the subroutines *catalyst_init*, *catalyst_process* and *catalyst_end*, which employ default Catalyst functions (e.g. *requestdatadescription*) as well the ones that we developed for mapping Nek fields in VTK format (e.g. *creategrid* and *add_scalar_field*). Note that this file also contains timers, which, at present, write a separate record for each MPI rank.
 
-### *nek_catalyst.cxx*
-
-Located in *Nek5000/core/3rd_party/*.
+### *Nek5000/core/3rd_party/nek_catalyst.cxx*
 
 This file is not part of Nek5000. It contains the functions that we developed for mapping Nek fields in VTK format. 
 
-### *mkuserfile*
-
-Located in *Nek5000/core/*.
+### *Nek5000/core/mkuserfile*
 
 This file is part of Nek5000. It is modified to add the subroutine *catalyst_usrpipe* to the case_name.f, which will be compiled. At present, it only allows for using a single pipeline, with name "pipe.py", located in the working directory.
 

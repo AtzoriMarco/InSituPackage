@@ -2,11 +2,11 @@
 
 In this repository, we describe our implementation of an in-situ adaptor for *Nek5000* and *ParaView/Catalyst*, as well the building process of all its components, and a test case. The setup of the test case partially replicate that of a realistic high-fidelity simulation, but it we employed a sufficiently coarse resolution to allow testing on a standard personal computer.
 
-We are not using this repository for active development. We suggest considering it as a snapshot of a particular state of our code that we consider relevant.
+We are not using this repository for active development, but it rather represents a snapshot of our code at a particular state.
 
 The present document is organized in 4 sections: 1) Funding and contributors 2) Description of the in-situ adaptor and the interface *Nek5000/Catalyst*, 3) Building instructions and 4) Description of the test case.
 
-**Note:** this guide is written to allow building and running the test case without previous experience with *Nek5000* and *ParaView/Catalyst*, but it is not a self-contatined documentation. In particular, section 4 is written assuming that readers have familiarity with *Nek5000*. 
+**Note:** this guide is written to allow building and running the test case without previous experience with *Nek5000* and *ParaView/Catalyst*, but it is not a self-contatined documentation. In particular, section 4) is written assuming that readers have familiarity with *Nek5000*. 
 
 ## 1. Funding and contributors
 

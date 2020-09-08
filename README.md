@@ -199,6 +199,7 @@ The instructions for in-situ analysis are distributed between the main pipeline,
 
 In the present version, the operations performed include 1) creation of "slices", *i.e.* lateral view of the domain illustrating the velocity distrbution, 2) visualization of iso surfaces of a certain velocity value, and  3) writing to disk full 3D fields in VTK format.
 
+**Note:** a test for volume rendering is also included, but it results in a very high computational cost. The corresponding call in *pipe.py* is commented.
 
 The full set of operations performed and the relative time interval is listed in the log file of the simulation, as reported below:
 ```bash

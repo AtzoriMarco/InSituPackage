@@ -17,7 +17,7 @@ The creation of this repository was possible thanks to the following contributor
 
 1. Dr Niclas Jansson and Mohammad Rezai, who developed the adaptor between the numerical code *Nek5000* and the software for data analysis and visualization *Paraview*, and the building procedure.
 2. Anke Friederici, Wiebke Köpp and Prof. Tino Weinkauf, who worked on the Python pipeline and the timers for performance analysis.
-3. Marco Atzori, who provided the test case employed here and composed this guide.
+3. Marco Atzori, who provided test cases and composed this guide.
 
 Dr Ricardo Vinuesa, Prof Erwin Laure, Prof Philipp Schlatter and Prof Tino Weinkauf supervised the project. Furthermore, Dr Stefano Markidis gave valuable suggestions in evaluating the performance of the code, and Daniele Massaro and Fermin Mallor carried out tests and performance analyses.
 

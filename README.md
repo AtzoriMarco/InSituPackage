@@ -187,11 +187,11 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 This test case describes the flow around a NACA4412 at a moderate Reynolds number, and it is intermediate between a tutorial and an example of a realistic CFD simulation. 
 
-The setup shares some similarities with the high-fidelity numerical simulation carried out by Vinuesa *et al.* (https://doi.org/10.1016/j.ijheatfluidflow.2018.04.017), such as the boundary conditions, LES filter, tripping and checkpoint implementation. However, the default resolution is much coarser than what needed to provide an accurate description of the flow. In particular, the grid contains 10,500 spectral elements, and we employ polynomials of the 3rd order in the spatial discretization, resulting in 672,000 grid points (the smallest simulation carried out in the study mentioned above employed 28,000 elements and polynomials of 11th order, resulting in 48,384,000 grid points).
+The setup shares some similarities with the high-fidelity numerical simulation carried out by Vinuesa *et al.* (https://doi.org/10.1016/j.ijheatfluidflow.2018.04.017), such as the boundary conditions, LES filter, tripping and checkpoint implementation. However, the default resolution is much coarser than what needed to provide an accurate description of the flow. In particular, the grid contains 10,500 spectral elements, and we employ polynomials of the 3rd order in the spatial discretization, resulting in 672,000 grid points (the smallest simulation with proper resultion in the study mentioned above employed 28,000 elements and polynomials of 11th order, resulting in 48,384,000 grid points).
 
 The very coarse resolution allows running on personal computers with standard computational resources but also makes the results of the simulation unreliable.
 
-**Note:** the number of grid points of this test case can be easily increased by increasing the polynomial order. For instance, using the 15th polynomial order will result in 43,008,000 grid points, which is a reasonable proxy for a small CFD simulation. With this modification, the test case provided here can be used to carry out a scalability test on any HPC facility, assuming the building process is successful. 
+**Note:** the number of grid points of this test case can be easily increased by increasing the polynomial order. For instance, using the 15th polynomial order will result in 43,008,000 grid points, which is a reasonable proxy for a small high-fidelity CFD simulation. With this modification, the test case provided here can be used to carry out a scalability test on any HPC facility, assuming the building process is successful. 
 
 ### Pipeline
 

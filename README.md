@@ -83,8 +83,6 @@ export PYTHON=/usr/bin/python3
 
 **Note:** *prefix* is the path were the bin will be located.
 
-***TODO: add comments about shared/static option***
-
 2) In *~/InSituPackage/mesa-18.3.3*
 
 *make -j*

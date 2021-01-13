@@ -1,12 +1,12 @@
 # In-situ analysis in Catalyst and Nek5000 with Mesa
 
-In this repository, we describe our implementation of an in-situ adaptor for *Nek5000* and *ParaView/Catalyst*, as well the building process of all its components, and a test case. The setup of the test case partially replicate that of a realistic high-fidelity simulation, but it we employed a sufficiently coarse resolution to allow testing on a standard personal computer.
+In this repository, we describe our implementation of an in-situ adaptor for *Nek5000* and *ParaView/Catalyst*, as well the building process of all its components, and a test case. The setup of the test case partially replicate that of a realistic high-fidelity simulation, but we employed a sufficiently coarse resolution to allow testing on a standard personal computer.
 
 We are not using this repository for active development, but it rather represents a snapshot of our code at a particular state.
 
 The present document is organized in 4 sections: 1) Funding and contributors 2) Description of the in-situ adaptor and the interface *Nek5000/Catalyst*, 3) Building instructions and 4) Description of the test case.
 
-**Note:** this guide is written to allow building and running the test case without previous experience with *Nek5000* and *ParaView/Catalyst*, but it is not a self-contatined documentation. In particular, section 4) is written assuming that readers have familiarity with *Nek5000*. 
+**Note:** although this guide is written to allow building and running the test case without previous experience with *Nek5000* and *ParaView/Catalyst*, it is not a self-contatined documentation. In particular, section 4) is written assuming that readers have familiarity with *Nek5000*. 
 
 ## 1. Funding and contributors
 
@@ -128,7 +128,7 @@ cmake \
 
 **Note:** the last two lines specify the install and the source codes locations, respectively. The forth and third-last lines need to be set according with the system (where Python is installed).
 
-**Note:** in this example, both Mesa and Paraview share the same the path for binaries (*$HOME/InSituPackage/local*).
+**Note:** in this example, both Mesa and Paraview share the same path for binaries (*$HOME/InSituPackage/local*).
 
 2) In *~/InSituPackage/build*
 *make -j*
@@ -137,7 +137,7 @@ cmake \
 
 ### 3.4 Nek5000 (v17):
 
-1) Before compiling a case with the InSitu implementation, export Python-path enrivoment variables with the script:
+1) Before compiling a case with InSitu implementation, export Python-path enrivoment variables with the script:
 
 ```bash
 
@@ -185,7 +185,7 @@ CATALYST_INCS=`paraview-config --include vtkPVPythonCatalyst`
 
 This test case describes the flow around a NACA4412 at a moderate Reynolds number, and it is intermediate between a tutorial and an example of a realistic CFD simulation. 
 
-The setup shares some similarities with the high-fidelity numerical simulation carried out by Vinuesa *et al.* (https://doi.org/10.1016/j.ijheatfluidflow.2018.04.017), such as the boundary conditions, LES filter, tripping and checkpoint implementation. However, the default resolution is much coarser than what needed to provide an accurate description of the flow. In particular, the grid contains 10,500 spectral elements, and we employ polynomials of the 3rd order in the spatial discretization, resulting in 672,000 grid points (the smallest simulation with proper resultion in the study mentioned above employed 28,000 elements and polynomials of 11th order, resulting in 48,384,000 grid points).
+The setup shares some similarities with the high-fidelity numerical simulations carried out by Vinuesa *et al.* (https://doi.org/10.1016/j.ijheatfluidflow.2018.04.017), such as the boundary conditions, LES filter, tripping and checkpoint implementation. However, the default resolution is much coarser than what needed to provide an accurate description of the flow. In particular, the grid contains 10,500 spectral elements, and we employ polynomials of the 3rd order in the spatial discretization, resulting in 672,000 grid points (the smallest simulation with proper resultion in the study mentioned above employed 28,000 elements and polynomials of 11th order, resulting in 48,384,000 grid points).
 
 The very coarse resolution allows running on personal computers with standard computational resources but also makes the results of the simulation unreliable.
 
